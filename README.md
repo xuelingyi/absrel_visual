@@ -29,3 +29,11 @@ t=args[2]
 ## this is the name of the transcript/gene; the json file is named as ${t}.absrel.json
 color=args[3] ## NULL if R default, taylor if taylor colors (this may strike your eyes)
 
+
+
+
+    ## heatmap color indicating aa: only sites with at least one branch ER>2, and only give the max ER of the significant branches 
+    ## i.e., a site can have high ER on a non-significant branch
+
+    
+
