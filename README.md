@@ -19,15 +19,17 @@ This script will parse the json file output by aBSREL and generate the following
   * transcript: the name of the gene/transcript 
   * tested: whether the branch is the tested foreground or not
   * P_corrected: the corrected P value
-  * sites_nonsynonymous: the number of codons with nonsynonymous mutations on this branch
-  * sites_ER2: the number of codons with Evidence Ratio >2 on this branch (see below for ER definition)
+  * sites_nonsynonymous: the number of codons with nonsynonymous mutations on this branch (only reported if the hyphy version is 2.5 or higher)
+  * sites_ER2: the number of codons with Evidence Ratio >2 on this branch (see below for ER definition; only reported if the hyphy version is 2.5 or higher)
   * rate_class: the number of rate classes aBSREL output for this branch
   * LRT: the likelihood ratio test (LRT) aBSREL output for this branch
   * w1 - w3: the omega (w) value of rate classes 1 - 3 for this branch. NA if the rate class does not exist. An error will be reported if the branch has more than three rate classes.
   * 	w1_percent	- w3_percent: the percentage of codon sites assigned to each rate class. NA if the rate class does not exist,
 
-* absrel_tree.pdf
-*
+* **absrel_tree.pdf**: the plot of the absrel-estimated tree with branches colored by the corrected P values. Names of the internal branches having corrected P < 0.2 are also labeled.
+  * If hyphy version is 2.5 or higher, a heatmap will also be plotted to show the amino acid alignments of the codon sites that have
+     * at least one branch 
+
 * absrel_tested_alignment.pdf
 
 
@@ -44,9 +46,6 @@ This script will parse the json file output by aBSREL and generate the following
           only keep node labels of the significant or rapidly evolving internal branches
 
 
-
-
-       
 
 
 
