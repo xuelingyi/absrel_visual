@@ -1,22 +1,35 @@
 # absrel_visual
-visualize the json file output by hyphy-aBSREL 
+This R script can be used to visualize the json file output by hyphy-aBSREL (https://pmc.ncbi.nlm.nih.gov/articles/PMC4408413/), similar to the web tool http://vision.hyphy.org/aBSREL. 
 
-Rscript absrel_visual.R path gene heatmap_color
+# How to run
+```
+# This script is written in R 4.4.1
 
-path is the path to the folder where the json file is located
-gene is the name of the gene/transcript, and the json file should be named as ${t}.absrel.json 
-heatmap_color is the color for the alignment heatmap (only for hyphy version >= 2.5). 
-give NULL if default R colors
-give taylor if using taylor colors, this may be bright
+Rscript absrel_visual.R ${my.path} ${my.gene} NULL
 
+# my.path is the path to the folder where the json file is located (NOTE: no "/" at the end). The outputs will also be put in this directory.
+# ${my.gene} is the name of the gene/transcript, and the json file should be named as ${my.gene}.absrel.json 
+# NULL means that the alignment heatmap (only for hyphy version >= 2.5, see details below) will use default R colors
+# alternatively, replace "NULL" with "taylor" will use taylor colors, but note this may be bright
+```
+# More details
+This script will parse the json file output by aBSREL and generate the following files in the provided directory:
+* **absrel_T1.tsv**: a table similar to the branch-site table (or Table1) from hyphy vision. Columns are:
+  * branches: all branches in the tree
+  * transcript: the name of the gene/transcript 
+  * tested: whether the branch is the tested foreground or not
+  * P_corrected: the corrected P value
+  * sites_nonsynonymous: the number of codons with nonsynonymous mutations on this branch
+  * sites_ER2: the number of codons with Evidence Ratio >2 on this branch (see below for ER definition)
+  * rate_class: the number of rate classes aBSREL output for this branch
+  * LRT: the likelihood ratio test (LRT) aBSREL output for this branch
+  * w1 - w3: the omega (w) value of rate classes 1 - 3 for this branch. NA if the rate class does not exist. An error will be reported if the branch has more than three rate classes.
+  * 	w1_percent	- w3_percent: the percentage of codon sites assigned to each rate class. NA if the rate class does not exist,
 
-# to do below
-this script is written in R 4.4.1
+* absrel_tree.pdf
+*
+* absrel_tested_alignment.pdf
 
-path=args[1]
-this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
-t=args[2]
- this is the name of the gene; 
 
 
    T3 summary and alignment plot only for the branches with w>=1
@@ -33,12 +46,7 @@ t=args[2]
 
 
 
-         path=args[1]
- this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
-t=args[2]
- this is the name of the transcript/gene; the json file is named as ${t}.absrel.json
-color=args[3] ## NULL if R default, taylor if  colors (this may strike your eyes)
-
+       
 
 
 
