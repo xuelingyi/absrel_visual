@@ -205,7 +205,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
 }
 
 
-## plot the absrel-generated tree with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one significant branch
+## plot the absrel-generated tree with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one branch with p<=0.2
 T1$P_corrected = as.numeric(T1$P_corrected)
 
 if(min(T1$P_corrected) <= 0.2){
