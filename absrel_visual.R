@@ -94,7 +94,7 @@ for(i in 1:nrow(T1)){
     ## T2 summary and alignment plot only for the branches with w>=1
     if(my.branch %in% T2$branches){
       ## calculates the Evidence Ratio (ER, https://github.com/veg/hyphy/issues/989)
-      ## "log likelihood ratio ratios": ER = 2 log (L[site | selection allowed) - 2 log (L[site | selection not allowed])
+      ## "log likelihood ratio ratios": ER = exp( log (L[site | selection allowed) - 2 log (L[site | selection not allowed]))
       ## "They have a loose interpretation; site ER that is above 0 for the optimized null setting contributes something to the signal. Typically you want to look at ER of ~2 or higher as suggestive. However, there is no rigorous statistical interpretation here, i.e. ER = 2 means that there is some probability that site is under selection. Higher ERs mean more signal of selection."
       T2[T2$branches == my.branch, "ER"] = exp(data$`Site Log Likelihood`$unconstrained[[1]] - data$`Site Log Likelihood`$tested[[my.branch]][[1]])
       
