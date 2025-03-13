@@ -27,6 +27,7 @@ color_map_taylor <- c("A" = "#CCFF00", "V" = "#99FF00", "I" = "#66FF00", "L" = "
                       "P" = "#FFCC00", "C" = "#FFFF00")
 
 
+print("get absrel json file")
 data <- fromJSON(file = paste0(path, "/", t, ".absrel.json"))
 
 ## summarize omega and p per branch (absrel website Table 1)
@@ -52,11 +53,12 @@ tree = as.phylo(data$input$trees)
 all.branches = c(tree$tip.label, tree$node.label)
 
 ## prep table 3 only for higher hyphy versions
+print(paste0("hyphy version ", data$analysis$version))
 if(as.numeric(data$analysis$version) < 2.5){
-  print(paste0("hyphy version ", data$analysis$version))
-  print("T2 and alignemnts are not plotted!")
+  print("Note: T2 and alignemnts are not plotted for this hyphy version!")
   
 } else {
+  
   T1$sites_nonsynonymous = NA # the number of sites with nonsynonymous substitutions (different from the T1 in hyphy vision; not sure what they counted)
   T1$sites_ER2 = NA # the number of sites with ER > 2 (different from the T1 in hyphy vision; not sure what they counted)
   
@@ -73,7 +75,7 @@ if(as.numeric(data$analysis$version) < 2.5){
   T2$substitution = "no" # synonymous substitutions
 }
 
-## loop through branches
+print("loop through branches")
 for(i in 1:nrow(T1)){
   my.branch=T1[i, "branches"]
   
@@ -93,10 +95,7 @@ for(i in 1:nrow(T1)){
   if(as.numeric(data$analysis$version) >= 2.5){
     ## T2 summary and alignment plot only for the branches with w>=1
     if(my.branch %in% T2$branches){
-      ## calculates the Evidence Ratio (ER, https://github.com/veg/hyphy/issues/989)
-      ## "log likelihood ratio ratios": ER = exp( log (L[site | selection allowed) - 2 log (L[site | selection not allowed]))
-      ## "They have a loose interpretation; site ER that is above 0 for the optimized null setting contributes something to the signal. Typically you want to look at ER of ~2 or higher as suggestive. However, there is no rigorous statistical interpretation here, i.e. ER = 2 means that there is some probability that site is under selection. Higher ERs mean more signal of selection."
-      T2[T2$branches == my.branch, "ER"] = exp(data$`Site Log Likelihood`$unconstrained[[1]] - data$`Site Log Likelihood`$tested[[my.branch]][[1]])
+       T2[T2$branches == my.branch, "ER"] = exp(data$`Site Log Likelihood`$unconstrained[[1]] - data$`Site Log Likelihood`$tested[[my.branch]][[1]])
       
       # loop for each site
       for(s in 1:length(data$substitutions$'0')){
@@ -148,10 +147,10 @@ for(i in 1:nrow(T1)){
   }
 }
 
-## save the tables for the transcript
+print("save Table1")
 write.table(T1, paste0(path, "/absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
 
-## save Table 3 and plot alignments of branches with w>1 and at sites with substitutions
+print("save Table 3 and plot alignments of branches with w>1 at sites with substitutions")
 if(as.numeric(data$analysis$version) >= 2.5){
   write.table(T2, paste0(path, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
@@ -205,7 +204,8 @@ if(as.numeric(data$analysis$version) >= 2.5){
 }
 
 
-## plot the absrel-generated tree with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one significant branch
+print("plot the absrel-generated tree")
+# with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one significant branch
 T1$P_corrected = as.numeric(T1$P_corrected)
 
 if(min(T1$P_corrected) <= 0.2){
