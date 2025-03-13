@@ -1,12 +1,20 @@
 # absrel_visual
 visualize the json file output by hyphy-aBSREL 
 
+${path} is the path to the folder where the json file is located
+${gene} is the name of the gene/transcript, and the json file should be named as ${t}.absrel.json 
+${heatmap_color} is the color for the alignment heatmap (only for hyphy version >= 2.5). 
+heatmap.color=NULL # default R colors
+heatmap.color=taylor # taylor colors -- may be bright
+Rscript absrel_visual.R ${path} ${gene} ${heatmap_color}
+
+
 # this script is written in R 4.4.1
 
 path=args[1]
 ## this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
 t=args[2]
-## this is the name of the gene; the json file is named as ${t}.absrel.json
+## this is the name of the gene; 
 
 
   ## T3 summary and alignment plot only for the branches with w>=1
@@ -27,7 +35,7 @@ t=args[2]
 ## this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
 t=args[2]
 ## this is the name of the transcript/gene; the json file is named as ${t}.absrel.json
-color=args[3] ## NULL if R default, taylor if taylor colors (this may strike your eyes)
+color=args[3] ## NULL if R default, taylor if  colors (this may strike your eyes)
 
 
 
