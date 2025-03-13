@@ -150,7 +150,8 @@ for(i in 1:nrow(T1)){
 print("save Table1")
 write.table(T1, paste0(path, "/absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
 
-print("save Table 3 and plot alignments of branches with w>1 at sites with substitutions")
+print("save Table 3 and plot codon alignments")
+# only branches with w>1 at sites with substitutions
 if(as.numeric(data$analysis$version) >= 2.5){
   write.table(T2, paste0(path, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
