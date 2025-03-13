@@ -7,11 +7,15 @@ This R script can be used to visualize the json file output by hyphy-aBSREL (htt
 
 Rscript absrel_visual.R ${my.path} ${my.gene} NULL
 
-# my.path is the path to the folder where the json file is located (NOTE: no "/" at the end). The outputs will also be put in this directory.
-# ${my.gene} is the name of the gene/transcript, and the json file should be named as ${my.gene}.absrel.json 
-# NULL means that the alignment heatmap (only for hyphy version >= 2.5, see details below) will use default R colors
-# alternatively, replace "NULL" with "taylor" will use taylor colors, but note this may be bright
 ```
+input arguments: 
+* **${my.path}**: path to the folder where the json file is located.
+  * **NOTE: no "/" at the end**.
+  * The outputs will also be put in this directory.
+* **${my.gene}**: the name of the gene/transcript. **The json file should be named as ${my.gene}.absrel.json**.
+* **NULL** means that the alignment heatmap (only plotted for hyphy version >= 2.5, see details below) will use default R colors
+  * Alternatively, replace "NULL" with "**taylor**" will use taylor colors, but this may be very bright.
+
 # More details
 This script will parse the json file output by aBSREL and generate the following files in the provided directory:
 * **absrel_T1.tsv**: a table similar to the branch-site table (or Table1) from hyphy vision. Columns are:
