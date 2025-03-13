@@ -4,10 +4,8 @@ visualize the json file output by hyphy-aBSREL
 path: the path to the folder where the json file is located
 gene: the name of the gene/transcript, and the json file should be named as ${t}.absrel.json 
 heatmap_color: the color for the alignment heatmap (only for hyphy version >= 2.5). 
-heatmap.color=NULL 
-# default R colors
-heatmap.color=taylor 
-# taylor colors -- may be bright
+heatmap.color=NULL --> default R colors
+heatmap.color=taylor --> taylor colors -- may be bright
 Rscript absrel_visual.R ${path} ${gene} ${heatmap_color}
 
 
