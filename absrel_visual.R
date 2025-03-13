@@ -208,7 +208,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
 ## plot the absrel-generated tree with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one significant branch
 T1$P_corrected = as.numeric(T1$P_corrected)
 
-if(min(T1$P_corrected) <= 0.05){
+if(min(T1$P_corrected) <= 0.2){
  
   pdf(paste0(path, "/absrel_tree.pdf"), width = 9)
   branches.length = as.data.frame(tree$edge)
