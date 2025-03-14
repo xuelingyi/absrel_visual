@@ -210,8 +210,7 @@ print("plot the absrel-generated tree")
 T1$P_corrected = as.numeric(T1$P_corrected)
 
 if(min(T1$P_corrected) <= 0.2){
- 
-  pdf(paste0(path, "/absrel_tree.pdf"), width = 9)
+  ## plot the tree
   branches.length = as.data.frame(tree$edge)
   colnames(branches.length)=c("parent", "node")
   branches.length$length = NA
@@ -282,6 +281,8 @@ if(min(T1$P_corrected) <= 0.2){
     ## i.e., a site can have high ER on a non-significant branch
     heatmap2 = ali.ER2[, grep("_ER", names(ali.ER2))]
     rownames(heatmap2) = ali.ER2$label
+
+    pdf(paste0(path, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
     if(heatmap.color=="taylor"){
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
@@ -307,6 +308,7 @@ if(min(T1$P_corrected) <= 0.2){
     
   } else {
     ## lower hyphy versions, only print the tree
+    pdf(paste0(path, "/absrel_tree.pdf"), width = 7)
     print(p0 + labs(title=paste0(t, "\n", length(tree$tip.label), " tips")))
   }
   
