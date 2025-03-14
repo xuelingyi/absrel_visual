@@ -41,12 +41,13 @@ This script will parse the json file output by aBSREL and generate the following
   * ER: the Evidence Ratio of this site on this branch. Calculated as ER = exp(log (L[site | selection allowed) - log (L[site | selection not allowed])), following https://github.com/veg/hyphy/issues/989 "Higher ERs mean more signal of selection."
   * substitution: the type of substitution from the parent branch to this branch, including no substitution, nonsynonymous, synonymous, or deletion.
 
-* **absrel_tree.pdf**: This plot is generated only if at least one branch has the corrected p <=0.2. It will plot the absrel-estimated tree with branch lengths estimated by Nucleotide GTR and branches colors by the corrected P values. Names of the internal branches having corrected P <= 0.2 are also labeled.
+If at least one branch has the corrected p <=0.2, additional PDF file(s) will be generated:
+* **absrel_tree.pdf**: It will plot the absrel-estimated tree with branch lengths in Nucleotide GTR and branches colors indicating the corrected P values. Names of the internal branches having corrected P <= 0.2 are also labeled.
   * If hyphy version is 2.5 or higher, this will also include a heatmap showing the amino acid alignments of the codon sites that have ER>2 on at least one branch.
-  * The heatmap cells will be labeled by "the codon site"_"ER"_"ERmaxValue"_ where the ERmaxValue is the maximum ER of this site among the branches with corrected p <=0.2.
+  * The heatmap cells will be labeled by "${the codon site}_ER_${ERmaxValue}_" where the ERmaxValue is the maximum ER of this site among the branches with corrected p <=0.2.
   * Note: a site can have high ER on a non-significant branch, and a significant branch can have sites with ER=1 
 
-* **absrel_tested_alignment.pdf**: This plot is generated only if the hyphy version is at least 2.5. This plot will show the aligned codon sites of the branches with w>=1 (same branches in absrel_T2.tsv). The sites with no substitutions among these branches are removed. Colors indicate different amino acids in the taylor color. The sites with ER>2 are highlighted.
+* **absrel_tested_alignment.pdf**: This plot is generated only if the hyphy version is at least 2.5. It will show the aligned codon sites of the branches with w>=1 (same branches in absrel_T2.tsv). The sites with no substitutions among these branches are removed. Amino acids are indicated by the taylor color. The sites with ER>2 are highlighted.
 
     
 
