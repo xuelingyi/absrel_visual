@@ -16,7 +16,9 @@ path=args[1]
 ## this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
 t=args[2]
 ## this is the name of the transcript/gene; the json file is named as ${t}.absrel.json
-heatmap.color=args[3] ## NULL if R default, taylor if taylor colors (this may strike your eyes)
+fasta=args[3]
+## this is the name of the fasta file
+heatmap.color=args[4] ## NULL if R default, taylor if taylor colors (this may strike your eyes)
 
 
 get.parent.branch = function(my.branch, all.branches, tree, ...){
@@ -257,10 +259,10 @@ if(min(T1$P_corrected) <= 0.2){
                        breaks=c("***", "**", "*", "rapid_evolving", "not significant"), 
                        labels=c("<=0.0001", "(0.0001,0.001]", "(0.001,0.05]", "(0.05, 0.2]", ">0.2"))
   
-  ## add alignment heatmap for higher hyphy versions
-  if(as.numeric(data$analysis$version) >= 2.5){
+  ## add alignment heatmap if hyphy version is at least 2.5 and the alignment is provided
+  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(fasta)){
     # get hyphy input alignments 
-    ali = readBStringSet(paste0(path, "/", t, ".noref.fa"))
+    ali = readBStringSet(paste0(path, "/", fasta))
     ali.ER2 = data.frame(label = names(ali))
     
     # get codon sites with ER>2
