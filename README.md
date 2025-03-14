@@ -1,6 +1,9 @@
 # absrel_visual
 This R script can be used to visualize the json file output by hyphy-aBSREL (https://pmc.ncbi.nlm.nih.gov/articles/PMC4408413/), similar to the web tool http://vision.hyphy.org/aBSREL. 
 
+
+ "/codon_alignments/", t,
+ 
 # How to run
 ```
 # This script is written in R 4.4.1
