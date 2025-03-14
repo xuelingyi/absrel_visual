@@ -1,24 +1,25 @@
 # absrel_visual
 This R script can be used to visualize the json file output by hyphy-aBSREL (https://pmc.ncbi.nlm.nih.gov/articles/PMC4408413/), similar to the web tool http://vision.hyphy.org/aBSREL. 
 
-
- "/codon_alignments/", t,
  
 # How to run
 ```
 # This script is written in R 4.4.1
 
-Rscript absrel_visual.R ${my.path} ${my.gene} NULL
+Rscript absrel_visual.R ${my.dir} ${my.gene} ${my.fasta} NULL
 
 ```
 required libraries:
 rjson, ggtree, tidytree, phytools, ggplot2, coRdon, Biostrings
 
 input arguments: 
-* **${my.path}**: path to the folder where the json file is located.
+* **${my.dir}**: path to the folder where the json file (and the fasta file) is located.
   * **NOTE: no "/" at the end**.
   * The outputs will also be put in this directory.
 * **${my.gene}**: the name of the gene/transcript. **The json file should be named as ${my.gene}.absrel.json**.
+* **${my.fasta}**: the name of the fasta file used to run absrel.
+  * The fasta file should be located in the provided directory.
+  * It is only used with hyphy version >= 2.5. If not available, give "NULL" to this argument.
 * **NULL** means that the alignment heatmap (only plotted for hyphy version >= 2.5, see details below) will use default R colors
   * Alternatively, replace "NULL" with "**taylor**" will use taylor colors, but this may be very bright.
 
