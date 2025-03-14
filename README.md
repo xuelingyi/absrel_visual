@@ -8,6 +8,9 @@ This R script can be used to visualize the json file output by hyphy-aBSREL (htt
 Rscript absrel_visual.R ${my.path} ${my.gene} NULL
 
 ```
+required libraries:
+rjson, ggtree, tidytree, phytools, ggplot2, coRdon
+
 input arguments: 
 * **${my.path}**: path to the folder where the json file is located.
   * **NOTE: no "/" at the end**.
