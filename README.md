@@ -9,7 +9,7 @@ Rscript absrel_visual.R ${my.path} ${my.gene} NULL
 
 ```
 required libraries:
-rjson, ggtree, tidytree, phytools, ggplot2, coRdon
+rjson, ggtree, tidytree, phytools, ggplot2, coRdon, Biostrings
 
 input arguments: 
 * **${my.path}**: path to the folder where the json file is located.
