@@ -260,7 +260,7 @@ if(min(T1$P_corrected) <= 0.2){
   ## add alignment heatmap for higher hyphy versions
   if(as.numeric(data$analysis$version) >= 2.5){
     # get hyphy input alignments 
-    ali = readBStringSet(paste0(run.dir, "/codon_alignments/", t, "/", t, ".noref.fa"))
+    ali = readBStringSet(paste0(path, "/", t, ".noref.fa"))
     ali.ER2 = data.frame(label = names(ali))
     
     # get codon sites with ER>2
