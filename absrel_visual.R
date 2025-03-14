@@ -9,6 +9,7 @@ library(tidytree)
 library(phytools)
 library(ggplot2)
 library(coRdon)
+library(Biostrings)
 
 args <- commandArgs(TRUE)
 path=args[1]
