@@ -264,7 +264,7 @@ if(min(T1$P_corrected) <= 0.2){
     ali.ER2 = data.frame(label = names(ali))
     
     # get codon sites with ER>2
-    for(s in sort(unique(T3[T3$ER>2, "site"]))){
+    for(s in sort(unique(T2[T2$ER>2, "site"]))){
       
       # extract dna sequences of these sites and get the aa sequence 
       ali.ER2$site = sapply(ali.ER2$label, FUN=function(x){as.character(ali[[x]][(3*(s-1)+1):(3*s)])})
@@ -275,7 +275,7 @@ if(min(T1$P_corrected) <= 0.2){
       })
       
       ## include the maximum ER value of the site on any significant branch
-      names(ali.ER2)[ncol(ali.ER2)] = paste0(s, "_ER_", round(max(T3[T3$site ==s & T3$branches %in% T1[T1$P_corrected<=0.2, "branches"], "ER"])), "_")
+      names(ali.ER2)[ncol(ali.ER2)] = paste0(s, "_ER_", round(max(T2[T2$site ==s & T2$branches %in% T1[T1$P_corrected<=0.2, "branches"], "ER"])), "_")
     }
     
     ## heatmap color indicating aa: only sites with at least one branch ER>2, and only give the max ER of the significant branches 
