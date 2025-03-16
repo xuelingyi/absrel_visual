@@ -44,8 +44,8 @@ heatmap_color=NULL
 if(length(args) > 2){
 ## parse provided optional arguements
   for (arg in args[3:length(args)]) {
-    if (startsWith(arg, "alignment_file")) {
-      alignment_file=sub("--alignment=", "", arg)
+    if (startsWith(arg, "--alignment_file")) {
+      alignment_file=sub("--alignment_file=", "", arg)
       print(paste0("alignment file provided: ", alignment_file))
     }
     if (startsWith(arg, "--output_dir")) {
