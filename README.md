@@ -8,6 +8,8 @@ This R script can be used to visualize the json file output by hyphy-aBSREL (htt
 # required libraries:
 # rjson, ggtree, tidytree, phytools, ggplot2, coRdon, Biostrings
 
+## print the help manual
+Rscript absrel_visual.R -h
 Rscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=NULL] [--heatmap_color=NULL]
 
 ```
