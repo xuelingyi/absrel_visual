@@ -3,6 +3,14 @@
 #module unload R
 #module load R/4.4.1
 
+library(rjson, quietly = T)
+library(ggtree, quietly = T)
+library(tidytree, quietly = T)
+library(phytools, quietly = T)
+library(ggplot2, quietly = T)
+library(coRdon, quietly = T)
+library(Biostrings, quietly = T)
+
 print_help <- function() {
   cat("Description: \nThis script visualizes the json file output by aBSREL.\n")
   cat("\n")
@@ -56,14 +64,6 @@ if(length(args) > 2){
     }
   }
 }
-
-library(rjson)
-library(ggtree)
-library(tidytree)
-library(phytools)
-library(ggplot2)
-library(coRdon)
-library(Biostrings)
 
 get.parent.branch = function(my.branch, all.branches, tree, ...){
   return(all.branches[tree$edge[tree$edge[,2] %in% which(all.branches == my.branch), 1]])
