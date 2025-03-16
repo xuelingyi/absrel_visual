@@ -5,23 +5,27 @@ This R script can be used to visualize the json file output by hyphy-aBSREL (htt
 # How to run
 ```
 # This script is written in R 4.4.1
+# required libraries:
+# rjson, ggtree, tidytree, phytools, ggplot2, coRdon, Biostrings
 
-Rscript absrel_visual.R ${my.dir} ${my.gene} ${my.fasta} NULL
+Rscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=NULL] [--heatmap_color=NULL]
 
 ```
-required libraries:
-rjson, ggtree, tidytree, phytools, ggplot2, coRdon, Biostrings
 
-input arguments: 
-* **${my.dir}**: path to the folder where the json file (and the fasta file) is located.
-  * **NOTE: no "/" at the end**.
-  * The outputs will also be put in this directory.
-* **${my.gene}**: the name of the gene/transcript. **The json file should be named as ${my.gene}.absrel.json**.
-* **${my.fasta}**: the name of the fasta file used to run absrel.
-  * The fasta file should be located in the provided directory.
-  * It is only used with hyphy version >= 2.5. If not available, give "NULL" to this argument.
-* **NULL** means that the alignment heatmap (only plotted for hyphy version >= 2.5, see details below) will use default R colors
-  * Alternatively, replace "NULL" with "**taylor**" will use taylor colors, but this may be very bright.
+Required arguments: 
+* **gene_name**: The name of the gene/transcript. This will be included in the output files. Needs to be the 1st arguement.
+* **json_file**: The json file output by aBSREL. Add path if not in the working directory. Needs to be the 2nd arguement.
+
+Optional arguements:
+* **--alignment_file=** the name of the fasta file used to run absrel. Add path if not in the working directory. Defult is not used.
+  * Note: only used with hyphy version >= 2.5 for plotting alignments with the tree.
+* **--output_dir=** the directory to save output files. Default is the current working directory.
+  * Note: do NOT include "/" at the end.
+* **--heatmap_color=** The color scheme for the alignment heatmap. Default is the R color scheme. Alternatve is --heatmap_color=taylor. 
+  * Note: only used if hyphy version >= 2.5 and the alignment file is provided.
+  * The taylor in this plot may be very bright.
+* **--help**: print the help message and exit
+
 
 # More details
 This script will parse the json file output by aBSREL and generate the following files in the provided directory:
@@ -50,7 +54,7 @@ This script will parse the json file output by aBSREL and generate the following
 
 If at least one branch has the corrected p <=0.2, additional PDF file(s) will be generated:
 * **absrel_tree.pdf**: It will plot the absrel-estimated tree with branch lengths in Nucleotide GTR and branches colors indicating the corrected P values. Names of the internal branches having corrected P <= 0.2 are also labeled.
-  * If hyphy version is 2.5 or higher, this will also include a heatmap showing the amino acid alignments of the codon sites that have ER>2 on at least one branch.
+  * If hyphy version is 2.5 or higher and the alignment file is provided, this will also include a heatmap showing the amino acid alignments of the codon sites that have ER>2 on at least one branch.
   * The heatmap cells will be labeled by "${the codon site}_ER_${ERmaxValue}_" where the ERmaxValue is the maximum ER of this site among the branches with corrected p <=0.2.
   * Note: a site can have high ER on a non-significant branch, and a significant branch can have sites with ER=1 
 
