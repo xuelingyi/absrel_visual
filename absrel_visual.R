@@ -42,8 +42,9 @@ if (length(args) < 2) {
   quit(status = 1)
 } else {
   t=args[1] 
+  print(paste0("gene name ", t))
   json=args[2]
-  print(paste0("summarize and plot json file ", json, " of gene ", t)) 
+  print(paste0("json file ", json)) 
 }
 
 alignment_file=NULL
