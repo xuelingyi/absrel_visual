@@ -207,7 +207,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
   if(min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2){
     ## plot alignments of the tested (w>1) branches for each transcript that have significant branches
     T2$plot = sapply(T2$site, FUN=function(x){
-      if(all(T2[T2$site ==x, "substitution"] == "no")){
+      if(all(T2[T2$site ==x, "substitution"] %in% c("no", "delete"))){
         ## no branch has any substitution, do not plot this site
         return("no")
       } else {
