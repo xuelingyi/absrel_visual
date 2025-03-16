@@ -11,7 +11,11 @@ library(ggplot2, quietly = T)
 library(coRdon, quietly = T)
 library(Biostrings, quietly = T)
 
-print_help <- function() {
+# Parse command-line arguments
+args <- commandArgs(trailingOnly = TRUE)
+
+# Check if the user asked for help
+if ("--help" %in% args || "-h" %in% args) {
   cat("Description: \nThis script visualizes the json file output by aBSREL.\n")
   cat("\n")
   cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=.] [--heatmap_color=NULL]\n")
@@ -25,14 +29,7 @@ print_help <- function() {
   cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
   cat("  --help          (optional) Show this help message and exit\n")
   cat("\n")
-}
-
-# Parse command-line arguments
-args <- commandArgs(trailingOnly = TRUE)
-
-# Check if the user asked for help
-if ("--help" %in% args || "-h" %in% args) {
-  print_help()
+    
   quit(status = 0)
 }
 
