@@ -332,7 +332,17 @@ if(min(T1$P_corrected) <= 0.2){
     rownames(heatmap2) = ali.ER2$label
 
     pdf(paste0(output_dir, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
-    if(heatmap_color=="taylor"){
+    if(is.null(heatmap_color)) {
+      print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
+                     width=0.05*ncol(heatmap2), font.size=1.8, color="black",
+                     colnames_angle=90, colnames_position = "top", hjust = 0) + 
+              vexpand(0.1, 1) + 
+              theme(legend.key.size = unit(0.8, "line"),
+                    legend.text = element_text(size=6), legend.title = element_text(size=8),
+                    legend.position = "inside", legend.position.inside = c(0.1, 0.6),
+                    legend.background = element_blank()) +
+              labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
+    } else if(heatmap_color=="taylor"){
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
@@ -344,17 +354,7 @@ if(min(T1$P_corrected) <= 0.2){
                     legend.background = element_blank()) + 
               labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
     } 
-    if(is.null(heatmap_color)) {
-      print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
-                     width=0.05*ncol(heatmap2), font.size=1.8, color="black",
-                     colnames_angle=90, colnames_position = "top", hjust = 0) + 
-              vexpand(0.1, 1) + 
-              theme(legend.key.size = unit(0.8, "line"),
-                    legend.text = element_text(size=6), legend.title = element_text(size=8),
-                    legend.position = "inside", legend.position.inside = c(0.1, 0.6),
-                    legend.background = element_blank()) +
-              labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
-    }
+    
     
   } else {
     print("hyphy version < 2.5 or no alignment file provided; print the tree without alignments")
