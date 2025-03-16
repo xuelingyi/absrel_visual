@@ -14,7 +14,7 @@ library(Biostrings, quietly = T)
 print_help <- function() {
   cat("Description: \nThis script visualizes the json file output by aBSREL.\n")
   cat("\n")
-  cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=NULL] [--heatmap_color=NULL]\n")
+  cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=.] [--heatmap_color=NULL]\n")
   cat("\n")
   cat("Arguements:\n")
   cat("  gene_name       (required) The name of the gene/transcript. This will be included in the output files.\n")
