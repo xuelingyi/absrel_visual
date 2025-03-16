@@ -11,15 +11,59 @@ library(ggplot2)
 library(coRdon)
 library(Biostrings)
 
-args <- commandArgs(TRUE)
-path=args[1]
-## this is the path to the dir where the json file is stored (no "/" at the end); output will be in the same folder
-t=args[2]
-## this is the name of the transcript/gene; the json file is named as ${t}.absrel.json
-fasta=args[3]
-## this is the name of the fasta file
-heatmap.color=args[4] ## NULL if R default, taylor if taylor colors (this may strike your eyes)
+print_help <- function() {
+  cat("Description: \nThis script visualizes the json file output by aBSREL.\n")
+  cat("\n")
+  cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment=alignment_file] [--output_dir=NULL] [--heatmap_color=NULL]\n")
+  cat("\n")
+  cat("Arguements:\n")
+  cat("  gene_name         (required) The name of the gene/transcript. This will be included in the output files.\n")
+  cat("  json_file         (required) The json file output by aBSREL.\n")
+  cat("\n")
+  cat("  --alignment       (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
+  cat("  --output_dir      (optional) The output path. Default is the current working directory.\n")
+  cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
+  cat("  --help            (optional) Show this help message and exit\n")
+  cat("\n")
+}
 
+# Parse command-line arguments
+args <- commandArgs(trailingOnly = TRUE)
+
+# Check if the user asked for help
+if ("--help" %in% args || "-h" %in% args) {
+  print_help()
+  quit(status = 0)
+}
+
+# Process arguments
+if (length(args) < 2) {
+  cat("Error: Argument missing. Use --help for usage information.\n")
+  quit(status = 1)
+} else {
+  t=args[1] 
+  json=args[2]
+  print(paste0("summarize and plot json file ", json, " of gene ", t)) 
+}
+
+alignment=NULL
+output_dir="./"
+heatmap_color=NULL
+if(length(args) > 2){
+## parse provided optional arguements
+  for (arg in args[3:length(args)]) {
+    if (startsWith(arg, "--alignment")) {
+      alignment=sub("--alignment=", "", arg)
+    }
+    if (startsWith(arg, "--output_dir")) {
+      output_dir=sub("--output_dir=", "", arg)
+    }
+    if (startsWith(arg, "--heatmap_color")) {
+      heatmap_color=sub("--heatmap_color=", "", arg)
+    }
+  }
+}
+print(paste0("optional arguments: alignment_file=", alignment, ", output_dir=", out_path, ", heatmap_color=", heatmap.color))
 
 get.parent.branch = function(my.branch, all.branches, tree, ...){
   return(all.branches[tree$edge[tree$edge[,2] %in% which(all.branches == my.branch), 1]])
@@ -31,7 +75,7 @@ color_map_taylor <- c("A" = "#CCFF00", "V" = "#99FF00", "I" = "#66FF00", "L" = "
 
 
 print("get absrel json file")
-data <- fromJSON(file = paste0(path, "/", t, ".absrel.json"))
+data <- fromJSON(file = json)
 
 ## summarize omega and p per branch (absrel website Table 1)
 T1 = as.data.frame(names(data$`branch attributes`$'0'))
@@ -260,9 +304,9 @@ if(min(T1$P_corrected) <= 0.2){
                        labels=c("<=0.0001", "(0.0001,0.001]", "(0.001,0.05]", "(0.05, 0.2]", ">0.2"))
   
   ## add alignment heatmap if hyphy version is at least 2.5 and the alignment is provided
-  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(fasta)){
+  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(alignment)){
     # get hyphy input alignments 
-    ali = readBStringSet(paste0(path, "/", fasta))
+    ali = readBStringSet(paste0(path, "/", alignment))
     ali.ER2 = data.frame(label = names(ali))
     
     # get codon sites with ER>2
