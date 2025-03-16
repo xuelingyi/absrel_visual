@@ -20,11 +20,11 @@ Required arguments:
 * **json_file**: The json file output by aBSREL. Add path if not in the working directory. Needs to be the 2nd arguement.
 
 Optional arguements:
-* **--alignment_file=** the name of the fasta file used to run absrel. Add path if not in the working directory. Defult is not used.
+* **--alignment_file**: the name of the fasta file used to run absrel. Add path if not in the working directory. Defult is not used.
   * Note: only used with hyphy version >= 2.5 for plotting alignments with the tree.
-* **--output_dir=** the directory to save output files. Default is the current working directory.
+* **--output_dir**: the directory to save output files. Default is the current working directory.
   * Note: do NOT include "/" at the end.
-* **--heatmap_color=** The color scheme for the alignment heatmap. Default is the R color scheme. Alternatve is --heatmap_color=taylor. 
+* **--heatmap_color**: The color scheme for the alignment heatmap. Default is the R color scheme. Alternatve is --heatmap_color=taylor. 
   * Note: only used if hyphy version >= 2.5 and the alignment file is provided.
   * The taylor in this plot may be very bright.
 * **--help**: print the help message and exit
