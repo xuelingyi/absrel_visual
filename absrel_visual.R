@@ -3,27 +3,19 @@
 #module unload R
 #module load R/4.4.1
 
-library(rjson)
-library(ggtree)
-library(tidytree)
-library(phytools)
-library(ggplot2)
-library(coRdon)
-library(Biostrings)
-
 print_help <- function() {
   cat("Description: \nThis script visualizes the json file output by aBSREL.\n")
   cat("\n")
-  cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment=alignment_file] [--output_dir=NULL] [--heatmap_color=NULL]\n")
+  cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=NULL] [--heatmap_color=NULL]\n")
   cat("\n")
   cat("Arguements:\n")
-  cat("  gene_name         (required) The name of the gene/transcript. This will be included in the output files.\n")
-  cat("  json_file         (required) The json file output by aBSREL.\n")
+  cat("  gene_name       (required) The name of the gene/transcript. This will be included in the output files.\n")
+  cat("  json_file       (required) The json file output by aBSREL.\n")
   cat("\n")
-  cat("  --alignment       (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
-  cat("  --output_dir      (optional) The output path. Default is the current working directory.\n")
+  cat("  --alignment_file  (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
+  cat("  --output_dir      (optional) The output path (end with "/"). Default is the current working directory "./".\n")
   cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
-  cat("  --help            (optional) Show this help message and exit\n")
+  cat("  --help          (optional) Show this help message and exit\n")
   cat("\n")
 }
 
@@ -46,14 +38,15 @@ if (length(args) < 2) {
   print(paste0("summarize and plot json file ", json, " of gene ", t)) 
 }
 
-alignment=NULL
+alignment_file=NULL
 output_dir="./"
 heatmap_color=NULL
 if(length(args) > 2){
 ## parse provided optional arguements
   for (arg in args[3:length(args)]) {
-    if (startsWith(arg, "--alignment")) {
-      alignment=sub("--alignment=", "", arg)
+    if (startsWith(arg, "alignment_file")) {
+      alignment_file=sub("--alignment=", "", arg)
+      print(paste0("alignment file provided: ", alignment_file))
     }
     if (startsWith(arg, "--output_dir")) {
       output_dir=sub("--output_dir=", "", arg)
@@ -63,7 +56,14 @@ if(length(args) > 2){
     }
   }
 }
-print(paste0("optional arguments: alignment_file=", alignment, ", output_dir=", out_path, ", heatmap_color=", heatmap.color))
+
+library(rjson)
+library(ggtree)
+library(tidytree)
+library(phytools)
+library(ggplot2)
+library(coRdon)
+library(Biostrings)
 
 get.parent.branch = function(my.branch, all.branches, tree, ...){
   return(all.branches[tree$edge[tree$edge[,2] %in% which(all.branches == my.branch), 1]])
@@ -72,7 +72,6 @@ color_map_taylor <- c("A" = "#CCFF00", "V" = "#99FF00", "I" = "#66FF00", "L" = "
                       "Y" = "#00FFCC", "W" = "#00CCFF", "H" = "#0066FF", "R" = "#0000FF", "K" = "#6600FF", "N" = "#CC00FF",
                       "Q" = "#FF00CC", "E" = "#FF0066", "D" = "#FF0000", "S" = "#FF3300", "T" = "#FF6600", "G" = "#FF9900",
                       "P" = "#FFCC00", "C" = "#FFFF00")
-
 
 print("get absrel json file")
 data <- fromJSON(file = json)
@@ -194,13 +193,14 @@ for(i in 1:nrow(T1)){
   }
 }
 
-print("save Table1")
-write.table(T1, paste0(path, "/absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
+print(paste0("save outputs in ", output_dir))
+print("save Table 1")
+write.table(T1, paste0(output_dir, "absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
 
-print("save Table 3 and plot codon alignments")
 # only branches with w>1 at sites with substitutions
 if(as.numeric(data$analysis$version) >= 2.5){
-  write.table(T2, paste0(path, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
+  print("save Table 2 and plot codon alignments")
+  write.table(T2, paste0(output_dir, "absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
   # only summarize and plot data if at least one branch with corrected p <=0.2
   if(min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2){
@@ -233,7 +233,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
     T2$empty = "      "
     per=25
     
-    pdf(paste0(path, "/absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
+    pdf(paste0(output_dir, "absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
     for(seq in 1:ceiling(length(unique(T2$site))/per)){
       start = sort(unique(T2$site))[per*(seq-1) +1]
       end = sort(unique(T2$site))[min(per*seq, length(unique(T2$site)))]
@@ -252,12 +252,12 @@ if(as.numeric(data$analysis$version) >= 2.5){
 }
 
 
-print("plot the absrel-generated tree")
 # with branches lengths estimated by Nucleotide GTR and colored by corrected p values if at least one significant branch
 T1$P_corrected = as.numeric(T1$P_corrected)
 
 if(min(T1$P_corrected) <= 0.2){
-  ## plot the tree
+  print("plot the absrel-generated tree")
+ 
   branches.length = as.data.frame(tree$edge)
   colnames(branches.length)=c("parent", "node")
   branches.length$length = NA
@@ -304,9 +304,10 @@ if(min(T1$P_corrected) <= 0.2){
                        labels=c("<=0.0001", "(0.0001,0.001]", "(0.001,0.05]", "(0.05, 0.2]", ">0.2"))
   
   ## add alignment heatmap if hyphy version is at least 2.5 and the alignment is provided
-  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(alignment)){
+  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(alignment_file)){
+    print("plot alignments with the tree")
     # get hyphy input alignments 
-    ali = readBStringSet(paste0(path, "/", alignment))
+    ali = readBStringSet(alignment_file)
     ali.ER2 = data.frame(label = names(ali))
     
     # get codon sites with ER>2
@@ -329,7 +330,7 @@ if(min(T1$P_corrected) <= 0.2){
     heatmap2 = ali.ER2[, grep("_ER", names(ali.ER2))]
     rownames(heatmap2) = ali.ER2$label
 
-    pdf(paste0(path, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
+    pdf(paste0(output_dir, "absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
     if(heatmap.color=="taylor"){
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
@@ -341,7 +342,8 @@ if(min(T1$P_corrected) <= 0.2){
                     legend.position = "inside", legend.position.inside = c(0.1, 0.6),
                     legend.background = element_blank()) + 
               labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
-    } else {
+    } 
+    if(is.null(heatmap.color)) {
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
@@ -354,8 +356,8 @@ if(min(T1$P_corrected) <= 0.2){
     }
     
   } else {
-    ## lower hyphy versions, only print the tree
-    pdf(paste0(path, "/absrel_tree.pdf"), width = 7)
+    print("hyphy version < 2.5 or no alignment file provided; print the tree without alignments")
+    pdf(paste0(output_dir, "absrel_tree.pdf"), width = 7)
     print(p0 + labs(title=paste0(t, "\n", length(tree$tip.label), " tips")))
   }
   
