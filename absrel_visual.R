@@ -21,7 +21,7 @@ print_help <- function() {
   cat("  json_file       (required) The json file output by aBSREL.\n")
   cat("\n")
   cat("  --alignment_file  (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
-  cat("  --output_dir      (optional) The output path (end with /). Default is the current working directory ./ \n")
+  cat("  --output_dir      (optional) The output path (no / at the end). Default is the current working directory. \n")
   cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
   cat("  --help          (optional) Show this help message and exit\n")
   cat("\n")
@@ -47,7 +47,7 @@ if (length(args) < 2) {
 }
 
 alignment_file=NULL
-output_dir="./"
+output_dir=getwd()
 heatmap_color=NULL
 if(length(args) > 2){
 ## parse provided optional arguements
@@ -195,12 +195,12 @@ for(i in 1:nrow(T1)){
 
 print(paste0("save outputs in ", output_dir))
 print("save Table 1")
-write.table(T1, paste0(output_dir, "absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
+write.table(T1, paste0(output_dir, "/absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
 
 # only branches with w>1 at sites with substitutions
 if(as.numeric(data$analysis$version) >= 2.5){
   print("save Table 2 and plot codon alignments")
-  write.table(T2, paste0(output_dir, "absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
+  write.table(T2, paste0(output_dir, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
   # only summarize and plot data if at least one branch with corrected p <=0.2
   if(min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2){
@@ -233,7 +233,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
     T2$empty = "      "
     per=25
     
-    pdf(paste0(output_dir, "absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
+    pdf(paste0(output_dir, "/absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
     for(seq in 1:ceiling(length(unique(T2$site))/per)){
       start = sort(unique(T2$site))[per*(seq-1) +1]
       end = sort(unique(T2$site))[min(per*seq, length(unique(T2$site)))]
@@ -330,8 +330,8 @@ if(min(T1$P_corrected) <= 0.2){
     heatmap2 = ali.ER2[, grep("_ER", names(ali.ER2))]
     rownames(heatmap2) = ali.ER2$label
 
-    pdf(paste0(output_dir, "absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
-    if(heatmap.color=="taylor"){
+    pdf(paste0(output_dir, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
+    if(heatmap_color=="taylor"){
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
@@ -343,7 +343,7 @@ if(min(T1$P_corrected) <= 0.2){
                     legend.background = element_blank()) + 
               labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
     } 
-    if(is.null(heatmap.color)) {
+    if(is.null(heatmap_color)) {
       print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
@@ -357,7 +357,7 @@ if(min(T1$P_corrected) <= 0.2){
     
   } else {
     print("hyphy version < 2.5 or no alignment file provided; print the tree without alignments")
-    pdf(paste0(output_dir, "absrel_tree.pdf"), width = 7)
+    pdf(paste0(output_dir, "/absrel_tree.pdf"), width = 7)
     print(p0 + labs(title=paste0(t, "\n", length(tree$tip.label), " tips")))
   }
   
