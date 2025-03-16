@@ -13,7 +13,7 @@ print_help <- function() {
   cat("  json_file       (required) The json file output by aBSREL.\n")
   cat("\n")
   cat("  --alignment_file  (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
-  cat("  --output_dir      (optional) The output path (end with /). Default is the current working directory ./.\n")
+  cat("  --output_dir      (optional) The output path (end with /). Default is the current working directory ./ \n")
   cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
   cat("  --help          (optional) Show this help message and exit\n")
   cat("\n")
