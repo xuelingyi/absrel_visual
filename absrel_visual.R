@@ -330,7 +330,7 @@ if(min(T1$P_corrected) <= 0.2){
 
     pdf(paste0(output_dir, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
     if(is.null(heatmap_color)) {
-      print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
+      print(gheatmap(p0, heatmap2, offset=0.0018*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
               vexpand(0.1, 1) + 
@@ -340,7 +340,7 @@ if(min(T1$P_corrected) <= 0.2){
                     legend.background = element_blank()) +
               labs(title=paste0(t, "\n", length(tree$tip.label), " tips, ", length(ali[[1]]), "bp, ", length(ali[[1]])/3, " sites")))
     } else if(heatmap_color=="taylor"){
-      print(gheatmap(p0, heatmap2, offset=0.002*ncol(heatmap2), 
+      print(gheatmap(p0, heatmap2, offset=0.0018*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
                      colnames_angle=90, colnames_position = "top", hjust = 0) + 
               vexpand(0.1, 1) + 
