@@ -11,7 +11,7 @@ This R script can be used to visualize the json file output by hyphy-aBSREL (htt
 ## print the help manual
 # Rscript absrel_visual.R -h
 
-Rscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=.] [--prefix=gene_name] [--plot_nosignificance=F] [--heatmap_color=NULL] 
+Rscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=.] [--prefix=gene.name] [--plot_nosignificance=F] [--heatmap_color=NULL] 
 
 ```
 
