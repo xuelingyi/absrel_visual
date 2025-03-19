@@ -68,7 +68,7 @@ if(length(args) > 2){
       plot_nosignificance=get(sub("--plot_nosignificance=", "", arg))
     }
     if (startsWith(arg, "--prefix")) {
-      prefix=get(sub("--prefix=", "", arg))
+      prefix=sub("--prefix=", "", arg)
     }
   }
 }
