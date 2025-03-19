@@ -206,7 +206,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
   write.table(T2, paste0(output_dir, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
   # only summarize and plot data if at least one branch with corrected p <=0.2; or if the user asked for it
-  if((min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2) | plot_nosignificance){
+  if(min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))]) <= 0.2) | plot_nosignificance){   
     ## plot alignments of the tested (w>1) branches for each transcript that have significant branches
     T2$plot = sapply(T2$site, FUN=function(x){
       if(all(T2[T2$site ==x, "substitution"] %in% c("no", "delete"))){
