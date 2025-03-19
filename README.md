@@ -24,9 +24,11 @@ Optional arguements:
   * Note: only used with hyphy version >= 2.5 for plotting alignments with the tree.
 * **--output_dir**: the directory to save output files. Default is the current working directory.
   * Note: do NOT include "/" at the end.
-* **--heatmap_color**: The color scheme for the alignment heatmap. Default is the R color scheme. Alternatve is --heatmap_color=taylor. 
+* **--heatmap_color**: the color scheme for the alignment heatmap. Default is the R color scheme. Alternatve is --heatmap_color=taylor. 
   * Note: only used if hyphy version >= 2.5 and the alignment file is provided.
   * The taylor in this plot may be very bright.
+* **--prefix**: the prefix added to output file names. Default is NA. 
+* **--plot_nosignificance**: generate plots even if no branch has p<=0.2. Note that the heatmap will not give ER values if there is no significant branch. Default is False. Pass True to turn this on.  
 * **--help**: print the help message and exit
 
 
