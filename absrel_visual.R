@@ -27,7 +27,7 @@ if ("--help" %in% args || "-h" %in% args) {
   cat("  --alignment_file        (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
   cat("  --output_dir            (optional) The output path (no / at the end). Default is the current working directory. \n")
   cat("  --heatmap_color         (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
-  cat("  --plot_nosignificance   (optional) generate plots even if no branch has p<=0.2. Note that the heatmap still requires significant branches. Default is False. Pass True to turn this on.")
+  cat("  --plot_nosignificance   (optional) generate plots even if no branch has p<=0.2. Note that the heatmap will not give ER values if there is no significant branch. Default is False. Pass True to turn this on.")
   cat("  --help                  (optional) Show this help message and exit\n")
   cat("\n")
     
