@@ -26,6 +26,7 @@ if ("--help" %in% args || "-h" %in% args) {
   cat("\n")
   cat("  --alignment_file        (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
   cat("  --output_dir            (optional) The output path (no / at the end). Default is the current working directory. \n")
+  cat("  --prefix                (optional) The prefix added to output file names. Default is NA. \n")
   cat("  --heatmap_color         (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
   cat("  --plot_nosignificance   (optional) generate plots even if no branch has p<=0.2. Note that the heatmap will not give ER values if there is no significant branch. Default is False. Pass True to turn this on.")
   cat("  --help                  (optional) Show this help message and exit\n")
@@ -49,6 +50,7 @@ alignment_file=NULL
 output_dir=getwd()
 heatmap_color=NULL
 plot_nosignificance=F
+prefix=""
 if(length(args) > 2){
 ## parse provided optional arguements
   for (arg in args[3:length(args)]) {
@@ -64,6 +66,9 @@ if(length(args) > 2){
     }
     if (startsWith(arg, "--plot_nosignificance")) {
       plot_nosignificance=get(sub("--plot_nosignificance=", "", arg))
+    }
+    if (startsWith(arg, "--prefix")) {
+      prefix=get(sub("--prefix=", "", arg))
     }
   }
 }
@@ -198,12 +203,12 @@ for(i in 1:nrow(T1)){
 
 print(paste0("save outputs in ", output_dir))
 print("save Table 1")
-write.table(T1, paste0(output_dir, "/absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
+write.table(T1, paste0(output_dir, "/", prefix, "absrel_T1.tsv"), sep="\t", quote = F, row.names = F)
 
 # only branches with w>1 at sites with substitutions
 if(as.numeric(data$analysis$version) >= 2.5){
   print("save Table 2 and plot codon alignments")
-  write.table(T2, paste0(output_dir, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
+  write.table(T2, paste0(output_dir, "/", prefix, "absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
   # only summarize and plot data if at least one branch with corrected p <=0.2; or if the user asked for it
   p.all = unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))]
@@ -237,7 +242,7 @@ if(as.numeric(data$analysis$version) >= 2.5){
     T2$empty = "      "
     per=25
     
-    pdf(paste0(output_dir, "/absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
+    pdf(paste0(output_dir, "/", prefix, "absrel_tested_alignment.pdf"), width = per*0.53, height = 0.3*length(unique(T2$branches)))
     for(seq in 1:ceiling(length(unique(T2$site))/per)){
       start = sort(unique(T2$site))[per*(seq-1) +1]
       end = sort(unique(T2$site))[min(per*seq, length(unique(T2$site)))]
@@ -334,7 +339,7 @@ if(min(T1$P_corrected) <= 0.2 | plot_nosignificance){
     heatmap2 = ali.ER2[, grep("_ER", names(ali.ER2))]
     rownames(heatmap2) = ali.ER2$label
 
-    pdf(paste0(output_dir, "/absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
+    pdf(paste0(output_dir, "/", prefix, "absrel_tree.pdf"), width = (7+ncol(heatmap2)*0.3))
     if(is.null(heatmap_color)) {
       print(gheatmap(p0, heatmap2, offset=0.0018*ncol(heatmap2), 
                      width=0.05*ncol(heatmap2), font.size=1.8, color="black",
