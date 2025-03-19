@@ -21,13 +21,14 @@ if ("--help" %in% args || "-h" %in% args) {
   cat("Usage: \nRscript absrel_visual.R <gene_name> <json_file> [--alignment_file=NULL] [--output_dir=.] [--heatmap_color=NULL]\n")
   cat("\n")
   cat("Arguements:\n")
-  cat("  gene_name       (required) The name of the gene/transcript. This will be included in the output files.\n")
-  cat("  json_file       (required) The json file output by aBSREL.\n")
+  cat("  gene_name               (required) The name of the gene/transcript. This will be included in the output files.\n")
+  cat("  json_file               (required) The json file output by aBSREL.\n")
   cat("\n")
-  cat("  --alignment_file  (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
-  cat("  --output_dir      (optional) The output path (no / at the end). Default is the current working directory. \n")
-  cat("  --heatmap_color   (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
-  cat("  --help          (optional) Show this help message and exit\n")
+  cat("  --alignment_file        (optional) The alignment file used to run aBSREL. If provided and hyphy version is >=2.5, the tree will be plotted with an alignment heatmap. Defult is not used.\n")
+  cat("  --output_dir            (optional) The output path (no / at the end). Default is the current working directory. \n")
+  cat("  --heatmap_color         (optional) The color scheme for the alignment heatmap. Default (NA) is the R default color scheme. Alternatve is taylor colors. --heatmap_color=taylor \n")
+  cat("  --plot_nosignificance   (optional) generate plots even if no branch has p<=0.2. Default is False. Pass True to turn this on.")
+  cat("  --help                  (optional) Show this help message and exit\n")
   cat("\n")
     
   quit(status = 0)
@@ -47,6 +48,7 @@ if (length(args) < 2) {
 alignment_file=NULL
 output_dir=getwd()
 heatmap_color=NULL
+plot_nosignificance=F
 if(length(args) > 2){
 ## parse provided optional arguements
   for (arg in args[3:length(args)]) {
@@ -59,6 +61,9 @@ if(length(args) > 2){
     }
     if (startsWith(arg, "--heatmap_color")) {
       heatmap_color=sub("--heatmap_color=", "", arg)
+    }
+    if (startsWith(arg, "--plot_nosignificance")) {
+      plot_nosignificance=sub("--plot_nosignificance=", "", arg)
     }
   }
 }
@@ -200,8 +205,8 @@ if(as.numeric(data$analysis$version) >= 2.5){
   print("save Table 2 and plot codon alignments")
   write.table(T2, paste0(output_dir, "/absrel_T2.tsv"), sep="\t", quote = F, row.names = F)
   
-  # only summarize and plot data if at least one branch with corrected p <=0.2
-  if(min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2){
+  # only summarize and plot data if at least one branch with corrected p <=0.2; or if the user asked for it
+  if((min(as.numeric(unlist(data$`branch attributes`$'0')[grep("Corrected P-value", names(unlist(data$`branch attributes`$'0')))])) <= 0.2) | plot_nosignificance){
     ## plot alignments of the tested (w>1) branches for each transcript that have significant branches
     T2$plot = sapply(T2$site, FUN=function(x){
       if(all(T2[T2$site ==x, "substitution"] %in% c("no", "delete"))){
@@ -301,8 +306,8 @@ if(min(T1$P_corrected) <= 0.2){
                        breaks=c("***", "**", "*", "rapid_evolving", "not significant"), 
                        labels=c("<=0.0001", "(0.0001,0.001]", "(0.001,0.05]", "(0.05, 0.2]", ">0.2"))
   
-  ## add alignment heatmap if hyphy version is at least 2.5 and the alignment is provided
-  if(as.numeric(data$analysis$version) >= 2.5 & !is.null(alignment_file)){
+  ## add alignment heatmap if hyphy version is at least 2.5 or if the user asked for this, and the alignment is provided
+  if((as.numeric(data$analysis$version) >= 2.5 | plot_nosignificance) & !is.null(alignment_file)){
     print("plot alignments with the tree")
     # get hyphy input alignments 
     ali = readBStringSet(alignment_file)
