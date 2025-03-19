@@ -3,13 +3,13 @@
 #module unload R
 #module load R/4.4.1
 
-library(rjson, quietly = T)
-library(ggtree, quietly = T)
-library(tidytree, quietly = T)
-library(phytools, quietly = T)
-library(ggplot2, quietly = T)
-library(coRdon, quietly = T)
-library(Biostrings, quietly = T)
+suppressPackageStartupMessages(library(rjson, quietly = T))
+suppressPackageStartupMessages(library(ggtree, quietly = T))
+suppressPackageStartupMessages(library(tidytree, quietly = T))
+suppressPackageStartupMessages(library(phytools, quietly = T))
+suppressPackageStartupMessages(library(ggplot2, quietly = T))
+suppressPackageStartupMessages(library(coRdon, quietly = T))
+suppressPackageStartupMessages(library(Biostrings, quietly = T))
 
 # Parse command-line arguments
 args <- commandArgs(trailingOnly = TRUE)
