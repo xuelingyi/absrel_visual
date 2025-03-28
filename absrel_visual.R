@@ -366,7 +366,7 @@ if(min(T1$P_corrected) <= 0.2 | plot_nosignificance){
     
   } else {
     print("hyphy version < 2.5 or no alignment file provided; print the tree without alignments")
-    pdf(paste0(output_dir, "/absrel_tree.pdf"), width = 7)
+    pdf(paste0(output_dir, "/", prefix, "_absrel_tree.pdf"), width = 7)
     print(p0 + labs(title=paste0(t, "\n", length(tree$tip.label), " tips")))
   }
   
