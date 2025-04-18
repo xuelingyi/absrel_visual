@@ -65,7 +65,7 @@ if(length(args) > 2){
       heatmap_color=sub("--heatmap_color=", "", arg)
     }
     if (startsWith(arg, "--plot_nosignificance")) {
-      plot_nosignificance=get(sub("--plot_nosignificance=", "", arg))
+      plot_nosignificance=as.logical(sub("--plot_nosignificance=", "", arg))
     }
     if (startsWith(arg, "--prefix")) {
       prefix=sub("--prefix=", "", arg)
