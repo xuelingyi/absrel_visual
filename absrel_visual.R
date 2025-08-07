@@ -51,6 +51,7 @@ output_dir=getwd()
 heatmap_color=NULL
 plot_nosignificance=F
 prefix=t
+tree_only=F
 if(length(args) > 2){
 ## parse provided optional arguements
   for (arg in args[3:length(args)]) {
@@ -70,6 +71,9 @@ if(length(args) > 2){
     if (startsWith(arg, "--prefix")) {
       prefix=sub("--prefix=", "", arg)
     }
+    if (startsWith(arg, "--tree_only")) {
+      plot_nosignificance=as.logical(sub("--tree_only=", "", arg))
+    }
   }
 }
 
@@ -83,6 +87,10 @@ color_map_taylor <- c("A" = "#CCFF00", "V" = "#99FF00", "I" = "#66FF00", "L" = "
 
 print("get absrel json file")
 data <- fromJSON(file = json)
+
+## the absrel-generated tree
+tree = as.phylo(data$input$trees)
+all.branches = c(tree$tip.label, tree$node.label)
 
 ## summarize omega and p per branch (absrel website Table 1)
 T1 = as.data.frame(names(data$`branch attributes`$'0'))
@@ -101,10 +109,6 @@ T1$w2 = NA
 T1$w2_percent = NA
 T1$w3 = NA
 T1$w3_percent = NA
-
-## the absrel-generated tree
-tree = as.phylo(data$input$trees)
-all.branches = c(tree$tip.label, tree$node.label)
 
 ## prep table 3 only for higher hyphy versions
 print(paste0("hyphy version ", data$analysis$version))
@@ -313,7 +317,7 @@ if(min(T1$P_corrected) <= 0.2 | plot_nosignificance){
                        labels=c("<=0.0001", "(0.0001,0.001]", "(0.001,0.05]", "(0.05, 0.2]", ">0.2"))
   
   ## add alignment heatmap if hyphy version is at least 2.5 or if the user asked for this, and the alignment is provided
-  if((as.numeric(data$analysis$version) >= 2.5 | plot_nosignificance) & !is.null(alignment_file)){
+  if((as.numeric(data$analysis$version) >= 2.5 | plot_nosignificance) & !is.null(alignment_file) & !(tree_only)){
     print("plot alignments with the tree")
     # get hyphy input alignments 
     ali = readBStringSet(alignment_file)
@@ -365,12 +369,11 @@ if(min(T1$P_corrected) <= 0.2 | plot_nosignificance){
     
     
   } else {
-    print("hyphy version < 2.5 or no alignment file provided; print the tree without alignments")
+    print("hyphy version < 2.5 or no alignment file provided or asked to plot tree only; print the tree without alignments")
     pdf(paste0(output_dir, "/", prefix, "_absrel_tree.pdf"), width = 7)
     print(p0 + labs(title=paste0(t, "\n", length(tree$tip.label), " tips")))
   }
   
   dev.off()
 }
-
 
