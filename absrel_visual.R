@@ -7,7 +7,9 @@ suppressPackageStartupMessages(library(rjson, quietly = T))
 suppressPackageStartupMessages(library(ggtree, quietly = T))
 suppressPackageStartupMessages(library(tidytree, quietly = T))
 suppressPackageStartupMessages(library(phytools, quietly = T))
-suppressPackageStartupMessages(library(ggplot2, quietly = T))
+suppressPackageStartupMessages(library(ggplot2, quietly = T))  ## version 3.5.2
+#library(remotes)
+#install_version("ggplot2", version = "3.5.2", repos = "http://cran.us.r-project.org")
 suppressPackageStartupMessages(library(coRdon, quietly = T))
 suppressPackageStartupMessages(library(Biostrings, quietly = T))
 
@@ -248,11 +250,11 @@ if(as.numeric(data$analysis$version) >= 2.5){
       end = sort(unique(T2$site))[min(per*seq, length(unique(T2$site)))]
       
       print(ggplot(T2[T2$site >= start & T2$site <= end, ], aes(x = site_with_substitution, y = branches)) +
-              geom_label(aes(label = empty, color = ER_group), size = 4, linewidth=2.2) +
+              geom_label(aes(label = empty, color = ER_group), size = 4, label.size=2.2) +
               scale_color_manual(values=c("2"="white", "10"="grey", "50"="grey40", "large"="black"),
                                  breaks=c("2", "10", "50", "large"),
                                  labels=c("<2", "[2,10)", "[10, 50)", ">=50")) + 
-              geom_label(aes(label = codon, fill = codon_aa), color="black", size = 3, linewidth=0, alpha=0.7) +
+              geom_label(aes(label = codon, fill = codon_aa), color="black", size = 3, label.size=0, alpha=0.7) +
               scale_fill_manual(values=color_map_taylor, guide="none") +
               theme_classic())
     }
