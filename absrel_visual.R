@@ -3,13 +3,13 @@
 #module unload R
 #module load R/4.4.1
 
+#library(remotes)
+#install_version("ggplot2", version = "3.5.2", repos = "http://cran.us.r-project.org")
+suppressPackageStartupMessages(library(ggplot2, quietly = T))  ## version 3.5.2
 suppressPackageStartupMessages(library(rjson, quietly = T))
 suppressPackageStartupMessages(library(ggtree, quietly = T))
 suppressPackageStartupMessages(library(tidytree, quietly = T))
 suppressPackageStartupMessages(library(phytools, quietly = T))
-suppressPackageStartupMessages(library(ggplot2, quietly = T))  ## version 3.5.2
-#library(remotes)
-#install_version("ggplot2", version = "3.5.2", repos = "http://cran.us.r-project.org")
 suppressPackageStartupMessages(library(coRdon, quietly = T))
 suppressPackageStartupMessages(library(Biostrings, quietly = T))
 
